@@ -57,7 +57,39 @@ class Boop:
                     self.table[x][y+1] = self.space
             else:
                 self.table[x][y+1] = self.space
-
+        # Esquina superior izquierda
+        if x-1 >= 0 and y-1 >= 0 and self.table[x-1][y-1] != self.space:
+            if x-2 >= 0 and y-2 >= 0:
+                if self.table[x-2][y-2] == self.space:
+                    self.table[x-2][y-2] = self.table[x-1][y-1]
+                    self.table[x-1][y-1] = self.space
+            else:
+                self.table[x-1][y-1] = self.space
+        # Esquina superior derecha
+        if x-1 >= 0 and y+1 < self.size and self.table[x-1][y+1] != self.space:
+            if x-2 >= 0 and y+2 < self.size:
+                if self.table[x-2][y+2] == self.space:
+                    self.table[x-2][y+2] = self.table[x-1][y+1]
+                    self.table[x-1][y+1] = self.space
+            else:
+                self.table[x-1][y+1] = self.space
+        # Esquina inferior izquierda
+        if x+1 < self.size and y-1 >= 0 and self.table[x+1][y-1] != self.space:
+            if x+2 < self.size and y-2 >= 0:
+                if self.table[x+2][y-2] == self.space:
+                    self.table[x+2][y-2] = self.table[x+1][y-1]
+                    self.table[x+1][y-1] = self.space
+            else:
+                self.table[x+1][y-1] = self.space
+        # Esquina inferior derecha
+        if x+1 < self.size and y+1 < self.size and self.table[x+1][y+1] != self.space:
+            if x+2 < self.size and y+2 < self.size:
+                if self.table[x+2][y+2] == self.space:
+                    self.table[x+2][y+2] = self.table[x+1][y+1]
+                    self.table[x+1][y+1] = self.space
+            else:
+                self.table[x+1][y+1] = self.space
+        # Cambiar turno
         if self.shift == 1:
             self.shift = 2
         else:
