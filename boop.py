@@ -6,8 +6,12 @@ class Boop:
         self.space = '  '
         self.kitten_1 = '😈' 
         self.kitten_2 = '😺'
-        self.pieces_1 = 6
-        self.pieces_2 = 6
+        self.cat_1 = '👾'
+        self.cat_2 = '🐯'
+        self.num_kittens_1 = 6
+        self.num_kittens_2 = 6
+        self.num_cats_1 = 4
+        self.num_cats_2 = 4
 
     def create(self):
         for _ in range(self.size):
@@ -22,7 +26,7 @@ class Boop:
         ny = y + dy
         nnx = x + 2*dx
         nny = y + 2*dy
-        if 0 <= nx < self.size and 0 <= ny < self.size and self.table[nx][ny] != self.space:
+        if 0 <= nx < self.size and 0 <= ny < self.size and self.table[nx][ny] != self.space and self.table[nx][ny] != self.cat_1 and self.table[nx][ny] != self.cat_2:
             if 0 <= nnx < self.size and 0 <= nny < self.size:
                 if self.table[nnx][nny] == self.space:
                     self.table[nnx][nny] = self.table[nx][ny]
@@ -32,12 +36,15 @@ class Boop:
 
     def put(self, location: tuple):
         x, y = location
+        if self.table[x][y] != self.space:
+            print('Ubicacion ocupada, intente de nuevo.')
+            return False
         if self.shift == 1:
             self.table[x][y] = self.kitten_1
-            self.pieces_1 -= 1
+            self.num_kittens_1 -= 1
         else:
             self.table[x][y] = self.kitten_2
-            self.pieces_2 -= 1
+            self.num_kittens_2 -= 1
         directions = [
             (-1, 0), # Arriba
             (1, 0),  # Abajo
