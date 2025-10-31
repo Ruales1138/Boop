@@ -14,86 +14,43 @@ class Boop:
             self.table.append([self.space] * self.size)
 
     def print_table(self):
-        for i in range(self.size):
-            print(self.table[i])
+        for row in self.table:
+            print(row)
+    
+    def move(self, x: int, y: int, dx: int, dy: int):
+        nx = x + dx
+        ny = y + dy
+        nnx = x + 2*dx
+        nny = y + 2*dy
+        if 0 <= nx < self.size and 0 <= ny < self.size and self.table[nx][ny] != self.space:
+            if 0 <= nnx < self.size and 0 <= nny < self.size:
+                if self.table[nnx][nny] == self.space:
+                    self.table[nnx][nny] = self.table[nx][ny]
+                    self.table[nx][ny] = self.space 
+            else:
+                self.table[nx][ny] = self.space
 
     def put(self, location: tuple):
         x, y = location
         if self.shift == 1:
             self.table[x][y] = self.kitten_1
             self.pieces_1 -= 1
-        if self.shift == 2:
+        else:
             self.table[x][y] = self.kitten_2
             self.pieces_2 -= 1
-        # Arriba
-        if x-1 >= 0 and self.table[x-1][y] != self.space:
-            if x-2 >= 0:
-                if self.table[x-2][y] == self.space:
-                    self.table[x-2][y] = self.table[x-1][y]
-                    self.table[x-1][y] = self.space
-            else:
-                self.table[x-1][y] = self.space
-        # Abajo
-        if x+1 < self.size and self.table[x+1][y] != self.space:
-            if x+2 < self.size:
-                if self.table[x+2][y] == self.space:
-                    self.table[x+2][y] = self.table[x+1][y]
-                    self.table[x+1][y] = self.space
-            else:
-                self.table[x+1][y] = self.space
-        # Izquierda
-        if y-1 >= 0 and self.table[x][y-1] != self.space:
-            if y-2 >= 0:
-                if self.table[x][y-2] == self.space:
-                    self.table[x][y-2] = self.table[x][y-1]
-                    self.table[x][y-1] = self.space
-            else:
-                self.table[x][y-1] = self.space
-        # Derecha
-        if y+1 < self.size and self.table[x][y+1] != self.space:
-            if y+2 < self.size:
-                if self.table[x][y+2] == self.space:
-                    self.table[x][y+2] = self.table[x][y+1]
-                    self.table[x][y+1] = self.space
-            else:
-                self.table[x][y+1] = self.space
-        # Esquina superior izquierda
-        if x-1 >= 0 and y-1 >= 0 and self.table[x-1][y-1] != self.space:
-            if x-2 >= 0 and y-2 >= 0:
-                if self.table[x-2][y-2] == self.space:
-                    self.table[x-2][y-2] = self.table[x-1][y-1]
-                    self.table[x-1][y-1] = self.space
-            else:
-                self.table[x-1][y-1] = self.space
-        # Esquina superior derecha
-        if x-1 >= 0 and y+1 < self.size and self.table[x-1][y+1] != self.space:
-            if x-2 >= 0 and y+2 < self.size:
-                if self.table[x-2][y+2] == self.space:
-                    self.table[x-2][y+2] = self.table[x-1][y+1]
-                    self.table[x-1][y+1] = self.space
-            else:
-                self.table[x-1][y+1] = self.space
-        # Esquina inferior izquierda
-        if x+1 < self.size and y-1 >= 0 and self.table[x+1][y-1] != self.space:
-            if x+2 < self.size and y-2 >= 0:
-                if self.table[x+2][y-2] == self.space:
-                    self.table[x+2][y-2] = self.table[x+1][y-1]
-                    self.table[x+1][y-1] = self.space
-            else:
-                self.table[x+1][y-1] = self.space
-        # Esquina inferior derecha
-        if x+1 < self.size and y+1 < self.size and self.table[x+1][y+1] != self.space:
-            if x+2 < self.size and y+2 < self.size:
-                if self.table[x+2][y+2] == self.space:
-                    self.table[x+2][y+2] = self.table[x+1][y+1]
-                    self.table[x+1][y+1] = self.space
-            else:
-                self.table[x+1][y+1] = self.space
-        # Cambiar turno
-        if self.shift == 1:
-            self.shift = 2
-        else:
-            self.shift = 1
+        directions = [
+            (-1, 0), # Arriba
+            (1, 0),  # Abajo
+            (0, -1), # Izquierda
+            (0, 1),  # Derecha
+            (-1, -1),# Esquina superior izquierda
+            (-1, 1), # Esquina superior derecha
+            (1, -1), # Esquina inferior izquierda
+            (1, 1),  # Esquina inferior derecha
+        ]
+        for dx, dy in directions:
+            self.move(x, y, dx, dy)
+        self.shift = 2 if self.shift == 1 else 1
 
 
 

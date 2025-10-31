@@ -27,7 +27,5 @@ class Console:
             self.boop.print_table()
 
             
-
-
 c = Console()
 c.interface()
