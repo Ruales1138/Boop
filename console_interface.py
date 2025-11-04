@@ -27,7 +27,8 @@ class Console:
             x = int(input('Ingrese una nueva ubicacion en x:\n'))
             y = int(input('Ingrese una nueva ubicacion en y:\n'))
             print(f'Moviendo a ({x}, {y})')
-            self.boop.put((x, y))
+            if self.boop.put((x, y)):
+                self.option = False
             self.boop.print_table()
 
             

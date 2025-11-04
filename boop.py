@@ -58,6 +58,8 @@ class Boop:
         for dx, dy in directions:
             self.move(x, y, dx, dy)
         self.check_promotion()
+        if self.check_victory():
+            return True
         self.shift = 2 if self.shift == 1 else 1
 
     def check_promotion(self):
@@ -101,9 +103,42 @@ class Boop:
                             return True
         return False
 
+    def check_victory(self):
+        if (self.num_kittens_1 == 0 and self.num_cats_1 == 0) or (self.num_kittens_2 == 0 and self.num_cats_2 == 0):
+            print('Empate! No hay más piezas para jugar.')
+            return True
+        cat = self.cat_1 if self.shift == 1 else self.cat_2
+        num_cats = self.num_cats_1 if self.shift == 1 else self.num_cats_2
+        icon = self.kitten_1 if self.shift == 1 else self.kitten_2
+        if num_cats < 4:
+            directions = [
+                (-1, 0), # Arriba
+                (1, 0),  # Abajo
+                (0, -1), # Izquierda
+                (0, 1),  # Derecha
+                (-1, -1),# Esquina superior izquierda
+                (-1, 1), # Esquina superior derecha
+                (1, -1), # Esquina inferior izquierda
+                (1, 1),  # Esquina inferior derecha
+            ]
+            for x in range(self.size):
+                for y in range(self.size):
+                    if self.table[x][y] == cat:
+                        for dx, dy in directions:
+                            line = []
+                            for i in range(2):
+                                nx = x + i*dx
+                                ny = y + i*dy
+                                if 0 <= nx < self.size and 0 <= ny < self.size:
+                                    if self.table[nx][ny] == cat:
+                                        line.append((nx, ny))
+                            if len(line) == 2:
+                                print('*******************************************')
+                                print(f"✅✅✅Jugador {self.shift} {icon} gana! ✅✅✅")
+                                print('*******************************************')
+                                return True
 
-
-
+        return False
 
 b = Boop()
 b.create()
