@@ -22,6 +22,36 @@ class Boop:
     def print_table(self):
         for row in self.table:
             print(row)
+
+    def find_promotion_lines(self):
+        piece = self.kitten_1 if self.shift == 1 else self.kitten_2
+        directions = [
+            (-1, 0), # Arriba
+            (1, 0),  # Abajo
+            (0, -1), # Izquierda
+            (0, 1),  # Derecha
+            (-1, -1),# Esquina superior izquierda
+            (-1, 1), # Esquina superior derecha
+            (1, -1), # Esquina inferior izquierda
+            (1, 1),  # Esquina inferior derecha
+        ]
+        promotion_coords = []
+        for x in range(self.size):
+            for y in range(self.size):
+                if self.table[x][y] == piece:
+                    for dx, dy in directions:
+                        line = []
+                        for i in range(3):
+                            nx = x + i*dx
+                            ny = y + i*dy
+                            if 0 <= nx < self.size and 0 <= ny < self.size:
+                                if self.table[nx][ny] == piece:
+                                    line.append((nx, ny))
+                        if len(line) == 3:
+                            for p in line:
+                                if p not in promotion_coords:
+                                    promotion_coords.append(p)
+        return promotion_coords
     
     def move(self, x: int, y: int, dx: int, dy: int):
         nx = x + dx
@@ -67,10 +97,37 @@ class Boop:
         ]
         for dx, dy in directions:
             self.move(x, y, dx, dy)
-        self.check_promotion()
+        promotion_options = self.find_promotion_lines()
+        if promotion_options:
+            print(f"🎉 ¡Has formado una línea de 3 gatitos!")
+            print("Puedes promocionar uno a gato grande.")
+            print("Opciones disponibles:")
+            for option in promotion_options:
+                print(f' - {option}')
+            if promotion_choice and promotion_choice in promotion_options:
+                px, py = promotion_choice
+            else:
+                try:
+                    px = int(input("Ingrese la coordenada x del gatito a promocionar: "))
+                    py = int(input("Ingrese la coordenada y del gatito a promocionar: "))
+                    if (px, py) not in promotion_options:
+                        print("⚠️ Coordenada no válida, se usará la primera opción disponible.")
+                        px, py = promotion_options[0]
+                except Exception:
+                    print("⚠️ Entrada inválida, se usará la primera opción disponible.")
+                    px, py = promotion_options[0]
+            if self.shift == 1:
+                self.table[px][py] = self.cat_1
+                self.num_cats_1 -= 1
+            else:
+                self.table[px][py] = self.cat_2
+                self.num_cats_2 -= 1
+            print("🎉 ¡Promoción aplicada en:", (px, py), ")")
+        #self.check_promotion()
         if self.check_victory():
             return True
         self.shift = 2 if self.shift == 1 else 1
+        return False
 
     def check_promotion(self):
         piece = self.kitten_1 if self.shift == 1 else self.kitten_2
@@ -163,8 +220,10 @@ class Boop:
                         moves.append({'location': (x, y), 'piece_type': 'cat'})
         return moves
     
-    def simulate_move():
-        return
+    def simulate_move(self, move, promotion_choice=None):
+        new_state = self.clone()
+        res = new_state.put(move['location'], piece_type=move.get('piece_type', 'kitten'), promotion_choice=promotion_choice)
+        return new_state, {'ok': res, 'victory': res}
 
 b = Boop()
 b.create()
