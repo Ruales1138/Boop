@@ -1,3 +1,5 @@
+import copy
+
 class Boop:
     def __init__(self):
         self.table = []
@@ -34,17 +36,25 @@ class Boop:
             else:
                 self.table[nx][ny] = self.space
 
-    def put(self, location: tuple):
+    def put(self, location: tuple, piece_type: str = 'kitten', promotion_choice: tuple = None):
         x, y = location
         if self.table[x][y] != self.space:
             print('Ubicacion ocupada, intente de nuevo.')
             return False
         if self.shift == 1:
-            self.table[x][y] = self.kitten_1
-            self.num_kittens_1 -= 1
+            if piece_type == 'kitten':
+                self.table[x][y] = self.kitten_1
+                self.num_kittens_1 -= 1
+            else:
+                self.table[x][y] = self.cat_1
+                self.num_cats_1 -= 1
         else:
-            self.table[x][y] = self.kitten_2
-            self.num_kittens_2 -= 1
+            if piece_type == 'kitten':
+                self.table[x][y] = self.kitten_2
+                self.num_kittens_2 -= 1
+            else:
+                self.table[x][y] = self.cat_2
+                self.num_cats_2 -= 1
         directions = [
             (-1, 0), # Arriba
             (1, 0),  # Abajo
@@ -137,8 +147,24 @@ class Boop:
                                 print(f"✅✅✅Jugador {self.shift} {icon} gana! ✅✅✅")
                                 print('*******************************************')
                                 return True
-
         return False
+    
+    def clone(self):
+        return copy.deepcopy(self)
+    
+    def get_valid_moves(self):
+        moves = []
+        for x in range(self.size):
+            for y in range(self.size):
+                if self.table[x][y] == self.space:
+                    if (self.shift == 1 and self.num_kittens_1 > 0) or (self.shift == 2 and self.num_kittens_2 > 0):
+                        moves.append({'location': (x, y), 'piece_type': 'kitten'})
+                    if (self.shift == 1 and self.num_cats_1 > 0) or (self.shift == 2 and self.num_cats_2 > 0):
+                        moves.append({'location': (x, y), 'piece_type': 'cat'})
+        return moves
+    
+    def simulate_move():
+        return
 
 b = Boop()
 b.create()
