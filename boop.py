@@ -132,12 +132,11 @@ class Boop:
         return False
 
     def check_victory(self):
-        if (self.num_kittens_1 == 0 and self.num_cats_1 == 0) or (self.num_kittens_2 == 0 and self.num_cats_2 == 0):
+        if self.num_kittens_1 == 0 or self.num_kittens_2 == 0:
             print('Empate! No hay más piezas para jugar.')
             return True
         cat = self.cat_1 if self.shift == 1 else self.cat_2
         num_cats = self.num_cats_1 if self.shift == 1 else self.num_cats_2
-        icon = self.kitten_1 if self.shift == 1 else self.kitten_2
         if num_cats < 4:
             directions = [
                 (-1, 0), # Arriba
@@ -177,8 +176,8 @@ class Boop:
                 if self.table[x][y] == self.space:
                     if (self.shift == 1 and self.num_kittens_1 > 0) or (self.shift == 2 and self.num_kittens_2 > 0):
                         moves.append({'location': (x, y), 'piece_type': 'kitten'})
-                    if (self.shift == 1 and self.num_cats_1 > 0) or (self.shift == 2 and self.num_cats_2 > 0):
-                        moves.append({'location': (x, y), 'piece_type': 'cat'})
+                    # if (self.shift == 1 and self.num_cats_1 > 0) or (self.shift == 2 and self.num_cats_2 > 0):
+                    #     moves.append({'location': (x, y), 'piece_type': 'cat'})
         return moves
     
     def simulate_move(self, move, promotion_choice=None):
