@@ -134,9 +134,10 @@ class Boop:
         self.shift = 2 if self.shift == 1 else 1
         return False
 
-    def check_victory(self):
+    def check_victory(self, silent=False) -> bool:
         if self.num_kittens_1 == 0 or self.num_kittens_2 == 0:
-            print('Empate! No hay más piezas para jugar.')
+            if not silent:
+                print('Empate! No hay más piezas para jugar.')
             return True
         cat = self.cat_1 if self.shift == 1 else self.cat_2
         num_cats = self.num_cats_1 if self.shift == 1 else self.num_cats_2

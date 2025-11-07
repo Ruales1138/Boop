@@ -2,11 +2,8 @@ from math import inf
 from boop import Boop
 
 def evaluate(state: Boop) -> int:
-    if state.check_victory():
-        if state.shift == 2:
-            return inf
-        else:
-            return -inf
+    if state.check_victory(silent=True):
+        return inf if state.shift == 2 else -inf
     counts = {
         "cats_1": 0,
         "cats_2": 0,
@@ -21,7 +18,7 @@ def evaluate(state: Boop) -> int:
     w_cat = 10
     w_kitten = 1
     w_center = 2
-    w_promo = 5
+    w_promo = 50
     score = (counts['cats_1'] * w_cat + counts['kittens_1'] * w_kitten) - (counts['cats_2'] * w_cat + counts['kittens_2'] * w_kitten)
     center_cells = [(1,1),(1,2),(2,1),(2,2)]
     for x, y in center_cells:
