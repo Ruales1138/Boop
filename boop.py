@@ -66,7 +66,7 @@ class Boop:
             else:
                 self.table[nx][ny] = self.space
 
-    def put(self, location: tuple, piece_type: str = 'kitten', promotion_choice: tuple = None, quiet: bool = False):
+    def put(self, location: tuple, piece_type='kitten', promotion_choice: tuple = None):
         x, y = location
         if self.table[x][y] != self.space:
             print('Ubicacion ocupada, intente de nuevo.')
@@ -99,38 +99,30 @@ class Boop:
             self.move(x, y, dx, dy)
         promotion_options = self.find_promotion_lines()
         if promotion_options:
-            if not quiet:
-                print(f"🎉 ¡Has formado una línea de 3 gatitos!")
-                print("Puedes promocionar uno a gato grande.")
-                print("Opciones disponibles:")
-                for option in promotion_options:
-                    print(f' - {option}')
-            # Determine promotion choice: if quiet (simulation) and no explicit choice, pick first
+            print(f"🎉 ¡Has formado una línea de 3 gatitos!")
+            print("Puedes promocionar uno a gato grande.")
+            print("Opciones disponibles:")
+            for opt in promotion_options:
+                print(f" - {opt}")
             if promotion_choice and promotion_choice in promotion_options:
                 px, py = promotion_choice
             else:
-                if quiet:
-                    px, py = promotion_options[0]
-                else:
-                    try:
-                        px = int(input("Ingrese la coordenada x del gatito a promocionar: "))
-                        py = int(input("Ingrese la coordenada y del gatito a promocionar: "))
-                        if (px, py) not in promotion_options:
-                            print("⚠️ Coordenada no válida, se usará la primera opción disponible.")
-                            px, py = promotion_options[0]
-                    except Exception:
-                        print("⚠️ Entrada inválida, se usará la primera opción disponible.")
+                try:
+                    entrada = input("Ingresa la coordenada a promover en formato x,y: ")
+                    px, py = map(int, entrada.split(","))
+                    if (px, py) not in promotion_options:
+                        print("⚠️ Coordenada no válida, se usará la primera opción disponible.")
                         px, py = promotion_options[0]
+                except Exception:
+                    print("⚠️ Entrada no válida, se usará la primera opción disponible.")
+                    px, py = promotion_options[0]
             if self.shift == 1:
                 self.table[px][py] = self.cat_1
                 self.num_cats_1 -= 1
             else:
                 self.table[px][py] = self.cat_2
                 self.num_cats_2 -= 1
-            if not quiet:
-                print("🎉 ¡Promoción aplicada en:", (px, py), ")")
-        #self.check_promotion()
-        # Check victory; only print inside check_victory when quiet is False
+            print(f"✅ ¡Promoción exitosa en {px, py}!")
         if self.check_victory():
             return True
         self.shift = 2 if self.shift == 1 else 1
