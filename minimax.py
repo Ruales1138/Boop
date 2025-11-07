@@ -20,7 +20,21 @@ def evaluate(state: Boop) -> int:
         counts['kittens_2'] += row.count(state.kitten_2)
     w_cat = 10
     w_kitten = 1
+    w_center = 2
+    w_promo = 5
     score = (counts['cats_1'] * w_cat + counts['kittens_1'] * w_kitten) - (counts['cats_2'] * w_cat + counts['kittens_2'] * w_kitten)
+    center_cells = [(1,1),(1,2),(2,1),(2,2)]
+    for x, y in center_cells:
+        if state.table[x][y] in (state.cat_1, state.kitten_1):
+            score += w_center
+        elif state.table[x][y] in (state.cat_2, state.kitten_2):
+            score -= w_center
+    promo_options = state.find_promotion_lines()
+    if promo_options:
+        if state.shift == 1:
+            score += w_promo
+        else:
+            score -= w_promo
     return score
 
 def minimax(state: Boop, depth: int, alpha: float, beta: float, maximizing: bool):
