@@ -1,4 +1,5 @@
 from boop import Boop
+from minimax import minimax
 
 class Console:
     def __init__(self):
@@ -24,6 +25,12 @@ class Console:
                 for _ in range(self.boop.num_cats_2):
                     pieces += self.boop.cat_2
                 print(f'Jugador 2 {pieces}')
+                print("🤖 Turno de la IA...")
+                _, best_move = minimax(self.boop, depth=3, alpha=-float('inf'), beta=float('inf'), maximizing=False)
+                print(f"IA elige: {best_move}")
+                self.boop.put(best_move['location'], piece_type=best_move['piece_type'])
+                self.boop.print_table()
+                continue
             x = int(input('Ingrese una nueva ubicacion en x:\n'))
             y = int(input('Ingrese una nueva ubicacion en y:\n'))
             print(f'Moviendo a ({x}, {y})')

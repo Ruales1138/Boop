@@ -26,3 +26,20 @@ def minimax(state: Boop, depth: int, alpha: float, beta: float, maximizing: bool
             if eval_score > max_eval:
                 max_eval = eval_score
                 best_move = move
+            alpha = max(alpha, eval_score)
+            if beta <= alpha:
+                break
+        return max_eval, best_move
+    else:
+        min_eval = inf
+        best_move = None
+        for move in moves:
+            new_state, info = state.simulate_move(move)
+            eval_score, _ = minimax(new_state, depth-1, alpha, beta, True)
+            if eval_score < min_eval:
+                min_eval = eval_score
+                best_move = move
+            beta = min(beta, eval_score)
+            if beta <= alpha:
+                break
+        return min_eval, best_move
