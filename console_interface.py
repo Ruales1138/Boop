@@ -18,7 +18,7 @@ class Console:
                 for _ in range(self.boop.num_cats_1):
                     pieces += self.boop.cat_1
                 print(f'Jugador 1 {pieces}')
-            if self.boop.shift == 2:
+            elif self.boop.shift == 2:
                 pieces = ''
                 for _ in range(self.boop.num_kittens_2):
                     pieces += self.boop.kitten_2
@@ -31,8 +31,12 @@ class Console:
                 self.boop.put(best_move['location'], piece_type=best_move['piece_type'])
                 self.boop.print_table()
                 continue
-            x = int(input('Ingrese una nueva ubicacion en x:\n'))
-            y = int(input('Ingrese una nueva ubicacion en y:\n'))
+            try:
+                x = int(input('Ingrese una nueva ubicacion en x:\n'))
+                y = int(input('Ingrese una nueva ubicacion en y:\n'))
+            except ValueError:
+                print("Entrada invalida. Por favor ingrese numeros enteros.")
+                continue
             print(f'Moviendo a ({x}, {y})')
             if self.boop.put((x, y)):
                 self.option = False
