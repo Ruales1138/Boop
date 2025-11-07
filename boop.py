@@ -109,7 +109,7 @@ class Boop:
             if promotion_choice and promotion_choice in promotion_options:
                 px, py = promotion_choice
             else:
-                if self.shift == 1:
+                if self.shift == 1 and not silent:
                     try:
                         px = int(input("Ingresa la coordenada x a promover: "))
                         py = int(input("Ingresa la coordenada y a promover: "))
