@@ -66,10 +66,11 @@ class Boop:
             else:
                 self.table[nx][ny] = self.space
 
-    def put(self, location: tuple, piece_type='kitten', promotion_choice: tuple = None):
+    def put(self, location: tuple, piece_type='kitten', promotion_choice: tuple = None, silent=False) -> bool:
         x, y = location
         if self.table[x][y] != self.space:
-            print('Ubicacion ocupada, intente de nuevo.')
+            if not silent:
+                print('Ubicacion ocupada, intente de nuevo.')
             return False
         if self.shift == 1:
             if piece_type == 'kitten':
@@ -99,11 +100,12 @@ class Boop:
             self.move(x, y, dx, dy)
         promotion_options = self.find_promotion_lines()
         if promotion_options:
-            print(f"🎉 ¡Has formado una línea de 3 gatitos!")
-            print("Puedes promocionar uno a gato grande.")
-            print("Opciones disponibles:")
-            for opt in promotion_options:
-                print(f" - {opt}")
+            if not silent:
+                print(f"🎉 ¡Has formado una línea de 3 gatitos!")
+                print("Puedes promocionar uno a gato grande.")
+                print("Opciones disponibles:")
+                for opt in promotion_options:
+                    print(f" - {opt}")
             if promotion_choice and promotion_choice in promotion_options:
                 px, py = promotion_choice
             else:
@@ -125,7 +127,8 @@ class Boop:
             else:
                 self.table[px][py] = self.cat_2
                 self.num_cats_2 -= 1
-            print(f"✅ ¡Promoción exitosa en {px, py}!")
+            if not silent:
+                print(f"✅ ¡Promoción exitosa en {px, py}!")
         if self.check_victory():
             return True
         self.shift = 2 if self.shift == 1 else 1
@@ -182,7 +185,7 @@ class Boop:
     
     def simulate_move(self, move, promotion_choice=None):
         new_state = self.clone()
-        res = new_state.put(move['location'], piece_type=move.get('piece_type', 'kitten'), promotion_choice=promotion_choice)
+        res = new_state.put(move['location'], piece_type=move.get('piece_type', 'kitten'), promotion_choice=promotion_choice, silent=True)
         return new_state, {'ok': res, 'victory': res}
 
 b = Boop()
