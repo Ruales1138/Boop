@@ -39,7 +39,6 @@ class Boop:
                             if 0 <= nx < self.size and 0 <= ny < self.size:
                                 if self.table[nx][ny] == piece:
                                     line.append((nx, ny))
-                                    print(line)
                         if len(line) == 3:
                             promotion_coords = line
                             return promotion_coords
@@ -52,6 +51,7 @@ class Boop:
             return True
         cat = self.cat_1 if self.shift == 1 else self.cat_2
         num_cats = self.num_cats_1 if self.shift == 1 else self.num_cats_2
+        icon = self.kitten_1 if self.shift == 1 else self.kitten_2
         if num_cats <= self.total_cats - 2:
             directions = [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)]
             for x in range(self.size):
@@ -66,9 +66,10 @@ class Boop:
                                     if self.table[nx][ny] == cat:
                                         line.append((nx, ny))
                             if len(line) == 2:
-                                # print('*******************************************')
-                                # print(f"✅✅✅Jugador {self.shift} {icon} gana! ✅✅✅")
-                                # print('*******************************************')
+                                if not silent:
+                                    print('*******************************************')
+                                    print(f"✅✅✅Jugador {self.shift} {icon} gana! ✅✅✅")
+                                    print('*******************************************')
                                 return True
         return False
     
@@ -121,8 +122,8 @@ class Boop:
             else:
                 if self.shift == 1 and not silent:
                     try:
-                        px = int(input("Ingresa la coordenada x a promover: "))
-                        py = int(input("Ingresa la coordenada y a promover: "))
+                        px = int(input("Ingresa la coordenada x a promover:\n"))
+                        py = int(input("Ingresa la coordenada y a promover:\n"))
                         if (px, py) not in promotion_options:
                             print("⚠️ Coordenada no válida, se usará la primera opción disponible.")
                             px, py = promotion_options[0]
@@ -152,15 +153,12 @@ class Boop:
         for x in range(self.size):
             for y in range(self.size):
                 if self.table[x][y] == self.space:
-                    if (self.shift == 1 and self.num_kittens_1 > 0) or (self.shift == 2 and self.num_kittens_2 > 0):
-                        moves.append({'location': (x, y), 'piece_type': 'kitten'})
-                    # if (self.shift == 1 and self.num_cats_1 > 0) or (self.shift == 2 and self.num_cats_2 > 0):
-                    #     moves.append({'location': (x, y), 'piece_type': 'cat'})
+                    moves.append({'location': (x, y), 'piece_type': 'kitten'})
         return moves
     
     def simulate_move(self, move, promotion_choice=None):
         new_state = self.clone()
-        res = new_state.put(move['location'], piece_type=move.get('piece_type', 'kitten'), promotion_choice=promotion_choice, silent=True)
+        res = new_state.put(move['location'], move['piece_type'], promotion_choice, silent=True)
         return new_state, {'ok': res, 'victory': res}
 
 b = Boop()

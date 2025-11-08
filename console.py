@@ -40,6 +40,7 @@ class Console:
             print(f'Moviendo a ({x}, {y})')
             if self.boop.put((x, y)):
                 self.option = False
+            self.boop.get_valid_moves()
             self.boop.print_table()
 
             
