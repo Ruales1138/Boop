@@ -14,6 +14,7 @@ class Boop:
         self.num_kittens_2 = 6
         self.num_cats_1 = 4
         self.num_cats_2 = 4
+        self.total_cats = 4
 
     def create(self):
         for _ in range(self.size):
@@ -38,9 +39,38 @@ class Boop:
                             if 0 <= nx < self.size and 0 <= ny < self.size:
                                 if self.table[nx][ny] == piece:
                                     line.append((nx, ny))
+                                    print(line)
                         if len(line) == 3:
                             promotion_coords = line
+                            return promotion_coords
         return promotion_coords
+    
+    def check_victory(self, silent=False) -> bool:
+        if self.num_kittens_1 == 0 or self.num_kittens_2 == 0:
+            if not silent:
+                print('Empate! No hay más piezas para jugar.')
+            return True
+        cat = self.cat_1 if self.shift == 1 else self.cat_2
+        num_cats = self.num_cats_1 if self.shift == 1 else self.num_cats_2
+        if num_cats <= self.total_cats - 2:
+            directions = [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)]
+            for x in range(self.size):
+                for y in range(self.size):
+                    if self.table[x][y] == cat:
+                        for dx, dy in directions:
+                            line = []
+                            for i in range(2):
+                                nx = x + i*dx
+                                ny = y + i*dy
+                                if 0 <= nx < self.size and 0 <= ny < self.size:
+                                    if self.table[nx][ny] == cat:
+                                        line.append((nx, ny))
+                            if len(line) == 2:
+                                # print('*******************************************')
+                                # print(f"✅✅✅Jugador {self.shift} {icon} gana! ✅✅✅")
+                                # print('*******************************************')
+                                return True
+        return False
     
     def move(self, x: int, y: int, dx: int, dy: int):
         nx = x + dx
@@ -112,33 +142,6 @@ class Boop:
         if self.check_victory():
             return True
         self.shift = 2 if self.shift == 1 else 1
-        return False
-
-    def check_victory(self, silent=False) -> bool:
-        if self.num_kittens_1 == 0 or self.num_kittens_2 == 0:
-            if not silent:
-                print('Empate! No hay más piezas para jugar.')
-            return True
-        cat = self.cat_1 if self.shift == 1 else self.cat_2
-        num_cats = self.num_cats_1 if self.shift == 1 else self.num_cats_2
-        if num_cats < 4:
-            directions = [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)]
-            for x in range(self.size):
-                for y in range(self.size):
-                    if self.table[x][y] == cat:
-                        for dx, dy in directions:
-                            line = []
-                            for i in range(2):
-                                nx = x + i*dx
-                                ny = y + i*dy
-                                if 0 <= nx < self.size and 0 <= ny < self.size:
-                                    if self.table[nx][ny] == cat:
-                                        line.append((nx, ny))
-                            if len(line) == 2:
-                                # print('*******************************************')
-                                # print(f"✅✅✅Jugador {self.shift} {icon} gana! ✅✅✅")
-                                # print('*******************************************')
-                                return True
         return False
     
     def clone(self):
