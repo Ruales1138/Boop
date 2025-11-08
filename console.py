@@ -1,5 +1,5 @@
 from boop import Boop
-from minimax import minimax
+from minimax import minimax, evaluate
 
 class Console:
     def __init__(self):
@@ -41,6 +41,7 @@ class Console:
             if self.boop.put((x, y)):
                 self.option = False
             self.boop.get_valid_moves()
+            print('Ev: ',evaluate(self.boop))
             self.boop.print_table()
 
             
