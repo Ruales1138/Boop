@@ -26,7 +26,7 @@ def evaluate(state: Boop) -> int:
             score += w_center
         elif state.table[x][y] in (state.cat_2, state.kitten_2):
             score -= w_center
-    promo_options = state.find_promotion_lines()
+    promo_options = state.check_promotion()
     if promo_options:
         if state.shift == 1:
             score += w_promo

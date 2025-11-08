@@ -6,10 +6,10 @@ class Boop:
         self.size = 4
         self.shift = 1
         self.space = '  '
-        self.kitten_1 = '😈' 
-        self.kitten_2 = '😺'
-        self.cat_1 = '👾'
-        self.cat_2 = '🐯'
+        self.kitten_1 = '😺'
+        self.kitten_2 = '😈' 
+        self.cat_1 = '🐯'
+        self.cat_2 = '👾'
         self.num_kittens_1 = 6
         self.num_kittens_2 = 6
         self.num_cats_1 = 4
@@ -23,18 +23,9 @@ class Boop:
         for row in self.table:
             print(row)
 
-    def find_promotion_lines(self):
+    def check_promotion(self):
         piece = self.kitten_1 if self.shift == 1 else self.kitten_2
-        directions = [
-            (-1, 0), # Arriba
-            (1, 0),  # Abajo
-            (0, -1), # Izquierda
-            (0, 1),  # Derecha
-            (-1, -1),# Esquina superior izquierda
-            (-1, 1), # Esquina superior derecha
-            (1, -1), # Esquina inferior izquierda
-            (1, 1),  # Esquina inferior derecha
-        ]
+        directions = [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)]
         promotion_coords = []
         for x in range(self.size):
             for y in range(self.size):
@@ -48,9 +39,7 @@ class Boop:
                                 if self.table[nx][ny] == piece:
                                     line.append((nx, ny))
                         if len(line) == 3:
-                            for p in line:
-                                if p not in promotion_coords:
-                                    promotion_coords.append(p)
+                            promotion_coords = line
         return promotion_coords
     
     def move(self, x: int, y: int, dx: int, dy: int):
@@ -86,19 +75,10 @@ class Boop:
             else:
                 self.table[x][y] = self.cat_2
                 self.num_cats_2 -= 1
-        directions = [
-            (-1, 0), # Arriba
-            (1, 0),  # Abajo
-            (0, -1), # Izquierda
-            (0, 1),  # Derecha
-            (-1, -1),# Esquina superior izquierda
-            (-1, 1), # Esquina superior derecha
-            (1, -1), # Esquina inferior izquierda
-            (1, 1),  # Esquina inferior derecha
-        ]
+        directions = [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)]
         for dx, dy in directions:
             self.move(x, y, dx, dy)
-        promotion_options = self.find_promotion_lines()
+        promotion_options = self.check_promotion()
         if promotion_options:
             if not silent:
                 print(f"🎉 ¡Has formado una línea de 3 gatitos!")
@@ -142,16 +122,7 @@ class Boop:
         cat = self.cat_1 if self.shift == 1 else self.cat_2
         num_cats = self.num_cats_1 if self.shift == 1 else self.num_cats_2
         if num_cats < 4:
-            directions = [
-                (-1, 0), # Arriba
-                (1, 0),  # Abajo
-                (0, -1), # Izquierda
-                (0, 1),  # Derecha
-                (-1, -1),# Esquina superior izquierda
-                (-1, 1), # Esquina superior derecha
-                (1, -1), # Esquina inferior izquierda
-                (1, 1),  # Esquina inferior derecha
-            ]
+            directions = [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)]
             for x in range(self.size):
                 for y in range(self.size):
                     if self.table[x][y] == cat:
