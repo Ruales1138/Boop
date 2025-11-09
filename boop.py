@@ -142,8 +142,11 @@ class Boop:
                 print(f"✅ ¡Promoción exitosa en {px, py}!")
         if self.check_victory():
             return True
-        self.shift = 2 if self.shift == 1 else 1
+        #self.shift = 2 if self.shift == 1 else 1
         return False
+    
+    def change_shift(self):
+        self.shift = 2 if self.shift == 1 else 1
     
     def clone(self):
         return copy.deepcopy(self)
@@ -158,8 +161,8 @@ class Boop:
     
     def simulate_move(self, move, promotion_choice=None):
         new_state = self.clone()
-        res = new_state.put(move['location'], move['piece_type'], promotion_choice, silent=True)
-        return new_state, {'ok': res, 'victory': res}
+        answer = new_state.put(move['location'], move['piece_type'], promotion_choice, silent=True)
+        return new_state, answer
 
 b = Boop()
 b.create()

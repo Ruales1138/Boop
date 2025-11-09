@@ -25,12 +25,13 @@ class Console:
                 for _ in range(self.boop.num_cats_2):
                     pieces += self.boop.cat_2
                 print(f'Jugador 2 {pieces}')
-                # print("🤖 Turno de la IA...")
-                # _, best_move = minimax(self.boop, depth=3, alpha=-float('inf'), beta=float('inf'), maximizing=False)
-                # print(f"IA elige: {best_move}")
-                # self.boop.put(best_move['location'], piece_type=best_move['piece_type'])
-                # self.boop.print_table()
-                # continue
+                print("🤖 Turno de la IA...")
+                best_move = minimax(self.boop, 2)
+                print(f"IA elige: {best_move}")
+                self.boop.put(best_move['location'], best_move['piece_type'])
+                self.boop.print_table()
+                self.boop.change_shift()
+                continue
             try:
                 x = int(input('Ingrese una nueva ubicacion en x:\n'))
                 y = int(input('Ingrese una nueva ubicacion en y:\n'))
@@ -40,9 +41,8 @@ class Console:
             print(f'Moviendo a ({x}, {y})')
             if self.boop.put((x, y)):
                 self.option = False
-            self.boop.get_valid_moves()
-            print('Ev: ',evaluate(self.boop))
             self.boop.print_table()
+            self.boop.change_shift()
 
             
 c = Console()

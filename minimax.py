@@ -20,20 +20,36 @@ def evaluate(state: Boop) -> int:
     w_kitten = 1
     w_center = 2
     w_promo = 5
-    score = (counts['cats_1'] * w_cat + counts['kittens_1'] * w_kitten) - (counts['cats_2'] * w_cat + counts['kittens_2'] * w_kitten)
+    score = (counts['cats_2'] * w_cat + counts['kittens_2'] * w_kitten) - (counts['cats_1'] * w_cat + counts['kittens_1'] * w_kitten)
     center_cells = [(1,1),(1,2),(2,1),(2,2)]
     for x, y in center_cells:
         if state.table[x][y] in (state.cat_1, state.kitten_1):
-            score += w_center
-        elif state.table[x][y] in (state.cat_2, state.kitten_2):
             score -= w_center
+        elif state.table[x][y] in (state.cat_2, state.kitten_2):
+            score += w_center
     promo_options = state.check_promotion()
     if promo_options:
         if state.shift == 1:
-            score += w_promo
-        else:
             score -= w_promo
+        else:
+            score += w_promo
     return score
 
-def minimax():
-    return
+def minimax(state: Boop, max_depth, depth=0, shift=True, alpha=-inf, beta=inf):
+    if depth == max_depth:
+        return
+    possible_moves = state.get_valid_moves()
+    if shift:
+        max_eval = -inf
+        best_move = None
+        for move in possible_moves:
+            print(move)
+            new_state, answer = state.simulate_move(move)
+            score = evaluate(new_state)
+            print(score)
+            if score > max_eval:
+                max_eval = score
+                best_move = move
+    print(best_move)
+    return best_move
+
