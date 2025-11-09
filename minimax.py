@@ -35,21 +35,40 @@ def evaluate(state: Boop) -> int:
             score += w_promo
     return score
 
-def minimax(state: Boop, max_depth, depth=0, shift=True, alpha=-inf, beta=inf):
+def minimax(state: Boop, max_depth, depth=0, shift_max=True, alpha=-inf, beta=inf, best_move=None):
     if depth == max_depth:
-        return
+        score = evaluate(state)
+        print(score)
+        return score, best_move
+    if shift_max == True and state.shift == 1:
+        state.change_shift()
+    if shift_max == False and state.shift == 2:
+        state.change_shift()
     possible_moves = state.get_valid_moves()
-    if shift:
+    if shift_max:
         max_eval = -inf
-        best_move = None
         for move in possible_moves:
-            print(move)
-            new_state, answer = state.simulate_move(move)
-            score = evaluate(new_state)
-            print(score)
-            if score > max_eval:
-                max_eval = score
+            print('max', move, state.shift)
+            new_state, _ = state.simulate_move(move)
+            eval, _ = minimax(new_state, max_depth, depth+1, False, alpha, beta)
+            if eval > max_eval:
+                max_eval = eval
                 best_move = move
-    print(best_move)
-    return best_move
+            alpha = max(alpha, eval)
+            if beta <= alpha:
+                break
+        return max_eval, best_move
+    else:
+        min_eval = inf
+        for move in possible_moves:
+            print('min', move, state.shift)
+            new_state, _ = state.simulate_move(move)
+            eval, _ = minimax(new_state, max_depth, depth+1, True, alpha, beta)
+            if eval < min_eval:
+                min_eval = eval
+                best_move = move
+            beta = min(beta, eval)
+            if beta <= alpha:
+                break
+        return min_eval, best_move
 
