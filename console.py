@@ -26,7 +26,7 @@ class Console:
                     pieces += self.boop.cat_2
                 print(f'Jugador 2 {pieces}')
                 print("🤖 Turno de la IA...")
-                best_eval ,best_move = minimax(self.boop, 1)
+                best_eval ,best_move = minimax(self.boop, 2)
                 print(f"IA elige: {best_move}, {best_eval}")
                 if self.boop.put(best_move['location'], best_move['piece_type']):
                     self.option = False

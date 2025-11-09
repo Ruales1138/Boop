@@ -45,10 +45,10 @@ class Boop:
         return promotion_coords
     
     def check_victory(self, silent=False) -> bool:
-        if self.num_kittens_1 == 0 or self.num_kittens_2 == 0:
-            if not silent:
-                print('Empate! No hay más piezas para jugar.')
-            return True
+        # if self.num_kittens_1 == 0 or self.num_kittens_2 == 0:
+        #     if not silent:
+        #         print('Empate! No hay más piezas para jugar.')
+        #     return True
         cat = self.cat_1 if self.shift == 1 else self.cat_2
         num_cats = self.num_cats_1 if self.shift == 1 else self.num_cats_2
         icon = self.kitten_1 if self.shift == 1 else self.kitten_2

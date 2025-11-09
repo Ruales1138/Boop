@@ -17,8 +17,8 @@ def evaluate(state: Boop) -> int:
         counts['kittens_1'] += row.count(state.kitten_1)
         counts['kittens_2'] += row.count(state.kitten_2)
     w_cat = 10
-    w_kitten = 1
-    w_center = 2
+    w_kitten = 2
+    w_center = 1
     w_promo = 5
     score = (counts['cats_2'] * w_cat + counts['kittens_2'] * w_kitten) - (counts['cats_1'] * w_cat + counts['kittens_1'] * w_kitten)
     center_cells = [(1,1),(1,2),(2,1),(2,2)]
@@ -36,7 +36,7 @@ def evaluate(state: Boop) -> int:
     return score
 
 def minimax(state: Boop, max_depth, depth=0, shift_max=True, alpha=-inf, beta=inf, best_move=None):
-    if depth == max_depth:
+    if depth == max_depth or state.check_victory():
         score = evaluate(state)
         print(score)
         return score, best_move
@@ -57,6 +57,7 @@ def minimax(state: Boop, max_depth, depth=0, shift_max=True, alpha=-inf, beta=in
             alpha = max(alpha, eval)
             if beta <= alpha:
                 break
+        print('---', max_eval, best_move)
         return max_eval, best_move
     else:
         min_eval = inf
@@ -70,5 +71,6 @@ def minimax(state: Boop, max_depth, depth=0, shift_max=True, alpha=-inf, beta=in
             beta = min(beta, eval)
             if beta <= alpha:
                 break
+        print('---', min_eval, best_move)
         return min_eval, best_move
 
