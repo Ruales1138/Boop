@@ -17,7 +17,7 @@ def evaluate(state: Boop) -> int:
         counts['kittens_1'] += row.count(state.kitten_1)
         counts['kittens_2'] += row.count(state.kitten_2)
     w_cat = 10
-    w_kitten = 2
+    w_kitten = 3
     w_center = 1
     w_promo = 5
     score = (counts['cats_2'] * w_cat + counts['kittens_2'] * w_kitten) - (counts['cats_1'] * w_cat + counts['kittens_1'] * w_kitten)

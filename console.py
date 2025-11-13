@@ -26,11 +26,14 @@ class Console:
                     pieces += self.boop.cat_2
                 print(f'Jugador 2 {pieces}')
                 print("🤖 Turno de la IA...")
-                best_eval ,best_move = minimax(self.boop, 2)
+                best_eval ,best_move = minimax(self.boop, 3)
                 print(f"IA elige: {best_move}, {best_eval}")
                 if self.boop.put(best_move['location'], best_move['piece_type']):
                     self.option = False
                 self.boop.print_table()
+                if self.boop.num_kittens_1 == 0 or self.boop.num_kittens_2 == 0:
+                    print('----Empate----')
+                    self.option = False
                 self.boop.change_shift()
                 continue
             try:
